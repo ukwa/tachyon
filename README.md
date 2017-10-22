@@ -88,6 +88,8 @@ Change Log
 
 At this point, we switch tactics and try to support proxy-mode access and resolvable 'archival bookmark' URIs.
 
+Also added a more comprehensive build system based on that used by [this lesspass web extension](https://github.com/lesspass/webextension).
+
 Pre-2017 this extension aimed to re-direct requests to archived Mementos by intercepting `webRequests` and redirecting them to Memento API enpoints. This proved too difficult to get to work without relying on re-writing the page content (in particular, JavaScript HTTP requests were being blocks due to appearing to be cross-site requests, but this was being done within the jQuery library, before the request could get to the extension and be re-mapped).
 
 As the original intention was to aim for the highest possible playback quality, the strategy was switch to exploring how to make proxy-mode playback more usable. Furthermore, in the intervening time, many browsers have moved towards a common standard for web extensions, meaning that it should be possible to make the extension available to many different browsers (not just Chrome).
