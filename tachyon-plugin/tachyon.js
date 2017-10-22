@@ -3,8 +3,11 @@ var listenerIsActive = false;
 
 var targetTime = "Thu, 31 May 2001 20:35:00 GMT";
 
-var mementoPrefix = "http://www.webarchive.org.uk/wayback/memento/";
+//var mementoPrefix = "http://www.webarchive.org.uk/wayback/memento/";
+var mementoPrefix = "http://localhost:18080/memento/";
+var waybackPrefix = "http://localhost:18080/wayback/";
 var timegatePrefix = mementoPrefix + "timegate/";
+
 //
 // Redirect loop:
 //var timegatePrefix = "http://purl.org/memento/timegate/";
@@ -96,6 +99,7 @@ chrome.webRequest.onBeforeRequest.addListener(
           tabRels[details.tabId]["original"] != undefined ) 
       hasOriginal = true;
     if( details.url.indexOf(timegatePrefix) == 0 || 
+        details.url.indexOf(waybackPrefix)  == 0 ||
         details.url.indexOf(mementoPrefix)  == 0 ) {
       /*
         || (
@@ -103,8 +107,10 @@ chrome.webRequest.onBeforeRequest.addListener(
             (details.type == "main_frame" || details.type == "sub_frame_ARG" ) 
           ) ) {
   */
+        console.log("Not redirecting URL: "+details.url);    
         return {};
     }
+    console.log("Redirecting URL to: "+timegatePrefix+details.url.replace("?","%3F"));
     return { redirectUrl: timegatePrefix+(details.url.replace("?","%3F")) };
   },
   {
