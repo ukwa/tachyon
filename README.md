@@ -1,6 +1,24 @@
 Tachyon - Browse The Past
 =========================
 
+[![Chrome version][badge-cws]][link-cws] [![Firefox version][badge-amo]][link-amo] [![Autodeployment][badge-travis]][link-travis]
+
+  [badge-cws]: https://img.shields.io/chrome-web-store/v/XXX.svg?label=for%20chrome
+  [badge-amo]: https://img.shields.io/amo/v/XXX.svg?label=for%20firefox
+  [badge-travis]: https://img.shields.io/travis/ukwa/tachyon/master.svg?label=autodeployment
+  [link-cws]: https://chrome.google.com/webstore/detail/lesspass/XXX "Version published on Chrome Web Store"
+  [link-amo]: https://addons.mozilla.org/en-US/firefox/addon/XXX/ "Version published on Mozilla Add-ons"
+  [link-travis]: https://travis-ci.org/tachyon/webextension
+
+Chrome and Firefox web extension
+
+# Install
+
+ * [Firefox](https://addons.mozilla.org/en-US/firefox/addon/lesspass/)
+ * [Chrome](https://chrome.google.com/webstore/detail/lesspass/lcmbpoclaodbgkbjafnkbbinogcbnjih)
+
+# Description
+
 This is an experimental web extension exploring whether we can make proxy-mode access to web archives.
 
 Ideally, we could have different target time settings in every tab. However, [browser proxy settings](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/proxy) are not tab-scoped, they are global, so this is not trivial to implement. Even if we switch proxy settings when tabs are stwiched, any background activity in a tab will be re-directed to a different datetime when the switch is made. It may be possible to come up with more elaborate solutions for this, but for now it seems easier to accept that the proxy is a global setting and work with that.
@@ -15,7 +33,7 @@ The main temporal navigation would be through the toolbar button. This would be 
 
 Under the hood, the extension will need to put in the `Accept-Datetime` header on requests and likely try to avoid caching content by modifying headers in the response.
 
-We can also [register a protocol handler](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/registerProtocolHandler) to support URIs that point to an archived web page. Due to security limitations we can't add any-old protocols (e.g. no `webarchive:` or `pwid:` as proposed [here](https://github.com/ukwa/ukwa-player)), but we can add a `web+archive:` protocol and let the extension handle those links (here's how that was done for [ssh](https://chromium.googlesource.com/apps/libapps/+/master/nassh/js/nassh.js#222)). Our extension could look for URIs something like
+We can also [register a protocol handler](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/registerProtocolHandler) to support URIs that point to an archived web page. Due to security limitations we can't add any-old protocols (e.g. no `webarchive:` or `pwid:` as proposed [here](https://github.com/ukwa/ukwa-player)), but we can add a `web+archive:` protocol and let the extension handle those links (here's how that was done for [ssh](https://chromium.googlesource.com/apps/libapps/+/master/nassh/js/nassh.js#222)). Our extension could look for URIs something like:
 
     web+archive://proxy.webarchive.org.uk:80/?url=http://portico.bl.uk&timestamp=20010101120000
     web+archive://proxy.webarchive.org.uk:80/?url=http://www.bl.uk&datetime=2016-01-22T11.20.29Z&api=proxy
@@ -38,6 +56,29 @@ Other ideas:
 * Allow different proxies to be specified for different host/SURT ranges?
 * Interface with UKWA W3ACT API and allow some curation activities from in the browser?
 
+
+# Dev
+
+    npm install && npm run dev
+
+# Build
+
+    npm run build
+
+extensions are in `./build` folder
+
+    ./build/lesspass.chrome.zip
+    ./build/lesspass.firefox.xpi
+
+
+## License
+
+This project is licensed under the terms of the GNU GPLv3.
+
+
+## Issues
+
+report issues on [LessPass project](https://github.com/lesspass/lesspass/issues)
 
 
 Change Log
