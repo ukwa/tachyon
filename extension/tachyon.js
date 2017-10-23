@@ -185,6 +185,11 @@ chrome.webRequest.onHeadersReceived.addListener(
 );
 
 */
+navigator.registerProtocolHandler('web+webarchive',
+	    chrome.runtime.getURL('webarchive-bookmark.html#%s'),
+	    chrome.runtime.getManifest().name);
+	    console.log("Registered... "+ chrome.runtime.getURL('webarchive-bookmark.html#%s'));
+
 /**
  * Also allow Google Analytics to track if people are actually using this.
  * Only reports installations, no other details are shared.

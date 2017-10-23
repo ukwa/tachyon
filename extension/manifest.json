@@ -1,6 +1,7 @@
 {
    "manifest_version": 2,
-   "name": "UKWA Player - Browsing The Web Of The Past",
+   "minimum_chrome_version": "57",
+   "name": "UKWA Player",
    "version": "0.0.1",
    "background": {
        "scripts": ["tachyon.js"]
@@ -15,6 +16,19 @@
     "default_title": "UKWA Player - Browsing The Web Of The Past",
     "default_popup": "popup.html"
    },
+   "protocol_handlers": [
+  {
+    "protocol": "web+webarchive",
+    "name": "Web Archive Bookmark Viewer",
+    "uriTemplate": "./webarchive-bookmark.html#%s"
+  }
+  ],
+   "omnibox": {
+    "keyword": "web+webarchive"
+   },
+   "web_accessible_resources": [
+       "webarchive-bookmark.html"
+   ],
    "permissions": [
        "webRequest",
        "<all_urls>",
