@@ -20,7 +20,7 @@ var timegatePrefix = mementoPrefix + "timegate/";
  * determined from the headers during download.
  */
 
-
+/*
 function toggleActive(tab) {
     if( listenerIsActive ) {
         listenerIsActive = false;
@@ -79,11 +79,13 @@ chrome.extension.onMessage.addListener(function(msg, _, sendResponse) {
     chrome.extension.sendMessage({showTargetTime: true, targetTime: targetTime });
   }
 });
-
+*/
 /**
  * This takes the url of any request and redirects it to the TimeGate.
  * The actual Datetime request is handled later (see below).
  */
+
+/*
 chrome.webRequest.onBeforeRequest.addListener(
   function(details){
     // Pass through if the plugin is inactive.
@@ -103,12 +105,10 @@ chrome.webRequest.onBeforeRequest.addListener(
     if( details.url.indexOf(timegatePrefix) == 0 || 
         details.url.indexOf(waybackPrefix)  == 0 ||
         details.url.indexOf(mementoPrefix)  == 0 ) {
-      /*
-        || (
-            hasOriginal && 
-            (details.type == "main_frame" || details.type == "sub_frame_ARG" ) 
-          ) ) {
-  */
+      //  || (
+      //      hasOriginal && 
+      //      (details.type == "main_frame" || details.type == "sub_frame_ARG" ) 
+      //    ) ) {
         console.log("Not redirecting URL: "+details.url);    
         return {};
     }
@@ -116,14 +116,16 @@ chrome.webRequest.onBeforeRequest.addListener(
     return { redirectUrl: timegatePrefix+(details.url.replace("?","%3F")) };
   },
   {
-    urls: ["http://*/*", "https://*/*"]
+    urls: ["http:/ / * /*", "https:/ / * / *"]
   },
   ["blocking"]
 );
 
+*/
 /**
  * This modifies the request headers, adding in the desire Datetime.
  */
+/*
 chrome.webRequest.onBeforeSendHeaders.addListener(
     function(details) {
         // Pass through if the plugin is inactive.
@@ -138,10 +140,11 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         return {requestHeaders: details.requestHeaders};
     },
     {
-       urls: ["http://*/*", "https://*/*"]
+       urls: ["http://* /*", "https://* /*"]
     },
     ['requestHeaders','blocking']
  );
+*/
 
 /**
  * During download, look for the expected Link headers and store them
@@ -150,6 +153,8 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
  Link: <http://www.webarchive.org.uk/wayback/list/timebundle/http://www.webarchive.org.uk/ukwa/>;rel="timebundle", <http://www.webarchive.org.uk/ukwa/>;rel="original", <http://www.webarchive.org.uk/wayback/memento/20090313000232/http://www.webarchive.org.uk/ukwa/>;rel="first memento"; datetime="Fri, 13 Mar 2009 00:02:32 GMT", <http://www.webarchive.org.uk/wayback/memento/20100623220138/http://www.webarchive.org.uk/ukwa/>;rel="last memento"; datetime="Wed, 23 Jun 2010 22:01:38 GMT", <http://www.webarchive.org.uk/wayback/memento/20090401212218/http://www.webarchive.org.uk/ukwa/>;rel="next memento"; datetime="Wed, 01 Apr 2009 21:22:18 GMT" , <http://www.webarchive.org.uk/wayback/list/timemap/link/http://www.webarchive.org.uk/ukwa/>;rel="timemap"; type="application/link-format",<http://www.webarchive.org.uk/wayback/memento/timegate/http://www.webarchive.org.uk/ukwa/>;rel="timegate"
  * i.e. <([^>])>;rel="([^"])"
  */
+
+/*
 var relRegex = /<([^>]+)>;rel="([^"]+)"/g;
 var tabRels = [];
 chrome.webRequest.onHeadersReceived.addListener(
@@ -173,11 +178,13 @@ chrome.webRequest.onHeadersReceived.addListener(
     }
   },
   {
-    urls:["http://*/*", "https://*/*"],
+    urls:["http://* /*", "https://* /*"],
     types:["main_frame"]
   },
   ["responseHeaders","blocking"]
 );
+
+*/
 /**
  * Also allow Google Analytics to track if people are actually using this.
  * Only reports installations, no other details are shared.

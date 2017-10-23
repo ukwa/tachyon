@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
     <title>UKWA Player</title>
     <meta charset="utf-8">
@@ -11,7 +11,7 @@
     <style>
     body {
         font-family: sans-serif;
-        padding-top: 12px;
+        padding: 0.8rem 0;
         min-width: 260px;
     }
     .flatpickr-calendar {
@@ -24,19 +24,23 @@
     </style>
 </head>
 <body>
- <div class="container">
-  <form>
+   <div class="container">
     <div id="target-date-form" class="form-group flatpickr">
-      <label for="target-date">Target date</label>
-      <input id="target-date" class="form-control" type="text" placeholder="Select Target Date..." data-input>
+      <label for="target-date">Target</label>
+      <input id="target-date" class="form-control form-control-sm" type="text" placeholder="Select Target Date..." data-input>
       <small id="target-date-help" class="form-text text-muted">The desired date and time to view</small>
     </div>
-    <div class="form-group">
-      <button id="set_target_time" type="button" class="btn btn-primary">Set Time</button>
-      <button id="disable_timetravel" type="button" class="btn btn-primary">Disable</button>
+    <div id="current-date-form" class="form-group">
+      <label for="target-date">Current</label>
+      <input id="current-date" class="form-control form-control-sm" type="text" placeholder="Time-travel disabled..." disabled>
+      <small id="target-date-help" class="form-text text-muted">The date and time of the current page</small>
     </div>
-   </form>
-  </div>
+    <div class="btn-group btn-group-sm d-flex" role="group" aria-label="Control time">
+      <button id="disable-timetravel" type="button" class="btn btn-primary w-100 disabled">Disengage</button>
+      <button id="enable-timetravel" type="button" class="btn btn-primary w-100">Engage</button>
+      <button id="update-page" type="button" class="btn btn-primary w-100 disabled">Update</button>
+    </div>
+   </div>
    <!--  -->
    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
