@@ -1,22 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" media="all" type="text/css" href="jquery-ui-1.9.2.custom/css/smoothness/jquery-ui-1.9.2.custom.min.css" />
-        <link rel="stylesheet" media="all" type="text/css" href="jquery-ui-timepicker-addon.css" />
-
-    <script type="text/javascript" src="jquery-ui-1.9.2.custom/js/jquery-1.8.3.js"></script>
-        <script type="text/javascript" src="jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.js"></script>
-        <script type="text/javascript" src="jquery-ui-timepicker-addon.js"></script>
-        <script type="text/javascript" src="tachyon-popup.js"></script>
+    <title>UKWA Player</title>
+    <meta charset="utf-8">
+    <meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <!--  -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">
+    <style>
+    body {
+        font-family: sans-serif;
+        padding-top: 12px;
+        min-width: 260px;
+    }
+    .flatpickr-calendar {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+    .flatpickr-calendar:before, .flatpickr-calendar:after {
+        display: none !important;
+    }
+    </style>
 </head>
-<body style="font-size: 12px; width: 300px; height: 300px;">
-    <div>
-      <input type="text" name="alt_example_4_alt" id="alt_example_4_alt" value="" style="cursor: pointer; width: 100%;">
-      <div id="basic_example_1"></div>
-      <div>
-        <button id="set_target_time" type="button" class="ui-state-default ui-priority-primary ui-corner-all">Set Time</button>
-        <button id="disable_timetravel" type="button" class="ui-state-default ui-priority-primary ui-corner-all">Disable</button>
+<body>
+ <div class="container">
+  <form>
+    <div id="target-date-form" class="form-group flatpickr">
+      <label for="target-date">Target date</label>
+      <input id="target-date" class="form-control" type="text" placeholder="Select Target Date..." data-input>
+      <small id="target-date-help" class="form-text text-muted">The desired date and time to view</small>
     </div>
+    <div class="form-group">
+      <button id="set_target_time" type="button" class="btn btn-primary">Set Time</button>
+      <button id="disable_timetravel" type="button" class="btn btn-primary">Disable</button>
     </div>
+   </form>
+  </div>
+   <!--  -->
+   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+   <script src="https://unpkg.com/flatpickr"></script>
+   <!--  -->
+   <script type="text/javascript" src="tachyon-popup.js"></script>
 </body>
 </html>

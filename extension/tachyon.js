@@ -52,11 +52,13 @@ function toggleActive(tab) {
     }
 }
 
+
+
 function enableTimeTravel() {
 
 }
 
-chrome.browserAction.onClicked.addListener(toggleActive);
+//chrome.browserAction.onClicked.addListener(toggleActive);
 
 chrome.extension.onMessage.addListener(function(msg, _, sendResponse) {
   if (msg.disengageTimeGate) {

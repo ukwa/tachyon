@@ -1,35 +1,42 @@
-$(document).ready(function(){
-  var dtp = $('#basic_example_1');
-  dtp.datetimepicker({
-    altField: "#alt_example_4_alt",
-    altFieldTimeOnly: false,
-    // Thu, 31 May 2001 20:35:00 GMT
-    dateFormat: "D, dd M yy",
-    timeFormat: "HH:mm:ss",
-    separator: " ",
-    altFormat: "D, dd M yy",
-    altTimeFormat: "HH:mm:ss z",
-    altSeparator: " ",
-    changeYear: true,
-    // 
-    showButtonPanel: false
-  });
-  //
-  $('#set_target_time').click(function (){ 
-    chrome.extension.sendMessage({setTargetTime: true, targetTime: dtp.val() });
+
+document.onreadystatechange = function(){
+
+    targetDateCalendar = flatpickr("#target-date", {
+        dateFormat: "Z",
+        altInput: true,
+        enableTime: true,
+        altFormat: 'J F Y h:i K' ,
+        defaultDate: new Date(1996,0,1),
+        inline: true
+    });
+    console.log(targetDateCalendar)
+    
+    $('.flatpickr-calendar').hide();
+    
+    $('#target-date-form input').click(function(e){
+    	   $('.flatpickr-calendar').show();
+    	}).change(function(e){
+    	   $('.flatpickr-calendar').hide();
+    	});
+    
+    /*
+	
+  document.getElementById('set_target_time').onclick = function (){ 
+    chrome.runtime.sendMessage({setTargetTime: true, targetTime: dtp.val() });
     self.close();
-  });
-  $('#disable_timetravel').click(function (){ 
-    chrome.extension.sendMessage({disengageTimeGate: true});
+  };
+  document.getElementById('disable_timetravel').onclick = function (){ 
+    chrome.runtime.sendMessage({disengageTimeGate: true});
     self.close();
-  });
+  };
   // Request the latest time:
-  chrome.extension.sendMessage({requestTargetTime: true});
-  chrome.extension.onMessage.addListener(function(msg, _, sendResponse) {
+  chrome.runtime.sendMessage({requestTargetTime: true});
+  chrome.runtime.onMessage.addListener(function(msg, _, sendResponse) {
     if (msg.showTargetTime) {
       console.log("Showing date "+msg.targetTime);
       dtp.datetimepicker('setDate', msg.targetTime);
     }
   });
+  */
 
-});
+};

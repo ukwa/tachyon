@@ -1,7 +1,7 @@
 {
    "manifest_version": 2,
-   "name": "Tachyon - Browsing The Web Of The Past",
-   "version": "1.0.0",
+   "name": "UKWA Player - Browsing The Web Of The Past",
+   "version": "0.0.1",
    "background": {
        "scripts": ["tachyon.js"]
    },
@@ -11,14 +11,16 @@
           "128": "icon128.png" 
    },
    "browser_action": {
-    "default_icon": "icon.png",
-    "default_title": "Tachyon - Browsing The Web Of The Past"
+    "default_icon": "icon-off.png",
+    "default_title": "UKWA Player - Browsing The Web Of The Past",
+    "default_popup": "popup.html"
    },
    "permissions": [
        "webRequest",
        "<all_urls>",
        "webRequestBlocking",
+       "proxy",
        "tabs"
     ],
-    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'"
+    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com https://maxcdn.bootstrapcdn.com https://unpkg.com/ https://code.jquery.com https://cdnjs.cloudflare.com; object-src 'self'"
 }
