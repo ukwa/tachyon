@@ -29,7 +29,7 @@ The [address bar button](https://developer.mozilla.org/en-US/Add-ons/WebExtensio
 
 The address bar button should be coloured according to how good the fit between the target time and the page time(s) is. The button should provide a popup that at least gives the datetime of the main frame (but could be extended to show e.g. time-range of resources in page).
 
-The main temporal navigation would be through the toolbar button. This would be used to set the target time and engage/disengage the archival proxy (or proxies). It would also summarise the current page mementos available to assist in temporal navigation (e.g. jump to first previous next last would be shown here). Actions here can also force a reload of the page and possible [clear the cache](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/browsingData/removeCache) (as needed).
+The main temporal navigation would be through the toolbar button. This would be used to set the target time and engage/disengage the archival proxy (or proxies). It would also summarise the current page mementos available to assist in temporal navigation (e.g. jump to first previous next last would be shown here). Actions here can also force a reload of the page and possible [clear the cache](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/browsingData/removeCache) (as needed). The [proxy-blocker](https://github.com/mdn/webextensions-examples/tree/master/proxy-blocker) example extension is a useful guide for the basics of managing proxy settings.
 
 Under the hood, the extension will need to put in the `Accept-Datetime` header on requests and likely try to avoid caching content by modifying headers in the response.
 

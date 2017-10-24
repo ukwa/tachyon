@@ -1,5 +1,5 @@
 /* This is used to record the state of the plugin - active or not. */
-var listenerIsActive = false;
+var timeTravelEnabled = false;
 
 var targetTime = "Thu, 31 May 2001 20:35:00 GMT";
 
@@ -20,131 +20,74 @@ var timegatePrefix = mementoPrefix + "timegate/";
  * determined from the headers during download.
  */
 
-/*
-function toggleActive(tab) {
-    if( listenerIsActive ) {
-        listenerIsActive = false;
-        chrome.browserAction.setPopup({popup: ""});
-        chrome.browserAction.setIcon({path:"icon.png"});
-        // Strip our archival prefix, redirect to live site.
-        // If starts with timegatePrefix then strip that.
-        var original = tab.url;
-        if( original.indexOf(timegatePrefix) == 0 ) {
-          original = original.replace(timegatePrefix,"");
-        }
-        // Else fall back on Link header.
-        else {
-          // Look up relevant Link header entry:
-          if( tabRels[tab.id] != undefined && tabRels[tab.id]["original"] != undefined )
-            original = tabRels[tab.id]["original"];
-        }
-        console.log("Original: "+original);
-        // Update if changed:
-        if( original != tab.url) {
-          chrome.tabs.update(tab.id, {url: original} );
-        }
-    } else {
-        listenerIsActive = true;
-        chrome.browserAction.setIcon({path:"icon-on.png"});
-        chrome.browserAction.setPopup({popup: "popup.html"});
-        // Refresh tab to force switch to archival version:
-        chrome.tabs.reload(tab.id);
+function disableTimeTravel() {
+    if( timeTravelEnabled ) {
+        timeTravelEnabled = false;
+        chrome.browserAction.setIcon({path:"icon-off.png"});
+        // Remove the proxy override:
+        browser.proxy.unregister();
+        // revert to live site.
+        browser.tabs.reload({bypassCache: true});
     }
 }
-
-
 
 function enableTimeTravel() {
-
+    if( !timeTravelEnabled ) {
+        timeTravelEnabled = true;
+        chrome.browserAction.setIcon({path:"icon-on.png"});
+        // Enable the proxy:
+        browser.proxy.register('webarchive-proxy.js');
+        // Refresh tab to force switch to archival version:
+        browser.tabs.reload({bypassCache: true});
+    }
 }
 
-//chrome.browserAction.onClicked.addListener(toggleActive);
+function setTargetTime(timeString) {
+	targetTime = new Date(timeString).toUTCString()
+}
 
-chrome.extension.onMessage.addListener(function(msg, _, sendResponse) {
-  if (msg.disengageTimeGate) {
+chrome.runtime.onMessage.addListener(function(msg, _, sendResponse) {
+  if (msg.engageTimeTravel) {
+    console.log("Setting date "+msg.targetTime);
+    setTargetTime(msg.targetTime);
+    console.log("Engage TimeGate...");
+    enableTimeTravel();
+  } else	 if (msg.disengageTimeTravel) {
     console.log("Disengage TimeGate...");
-    chrome.tabs.getSelected(null, function(selectedTab) {
-      toggleActive(selectedTab);
-    });
+    disableTimeTravel();
   } else if( msg.setTargetTime ) {
     console.log("Setting date "+msg.targetTime);
-    targetTime = msg.targetTime;
-    chrome.tabs.getSelected(null, function(selectedTab) {
-      // Update by sending back to the TimeGate with the new Target Time:
-      chrome.tabs.update(selectedTab.id, {url: 
-        timegatePrefix+(tabRels[selectedTab.id]["original"].replace("?","%3F")) });
-    });
+    setTargetTime(msg.targetTime);
   } else if( msg.requestTargetTime ) {
     console.log("Sending current targetTime...");
-    chrome.extension.sendMessage({showTargetTime: true, targetTime: targetTime });
+    chrome.runtime.sendMessage({showTargetTime: true, targetTime: targetTime });
   }
 });
-*/
-/**
- * This takes the url of any request and redirects it to the TimeGate.
- * The actual Datetime request is handled later (see below).
- */
 
-/*
-chrome.webRequest.onBeforeRequest.addListener(
-  function(details){
-    // Pass through if the plugin is inactive.
-    if( !listenerIsActive ) {
-      return {};
-    }
-
-    // Re-direct to the preferred TimeGate:
-    // TODO switch to allowing timegatePrefix OR Memento-Datetime header?
-    // No, must note known Mementos (based on TimeGate response) and 
-    // allow those to pass-through.
-    //console.log("TabId: "+details.tabId);
-    var hasOriginal = false;
-    if( tabRels[details.tabId] != undefined && 
-          tabRels[details.tabId]["original"] != undefined ) 
-      hasOriginal = true;
-    if( details.url.indexOf(timegatePrefix) == 0 || 
-        details.url.indexOf(waybackPrefix)  == 0 ||
-        details.url.indexOf(mementoPrefix)  == 0 ) {
-      //  || (
-      //      hasOriginal && 
-      //      (details.type == "main_frame" || details.type == "sub_frame_ARG" ) 
-      //    ) ) {
-        console.log("Not redirecting URL: "+details.url);    
-        return {};
-    }
-    console.log("Redirecting URL to: "+timegatePrefix+details.url.replace("?","%3F"));
-    return { redirectUrl: timegatePrefix+(details.url.replace("?","%3F")) };
-  },
-  {
-    urls: ["http:/ / * /*", "https:/ / * / *"]
-  },
-  ["blocking"]
-);
-
-*/
 /**
  * This modifies the request headers, adding in the desire Datetime.
  */
-/*
-chrome.webRequest.onBeforeSendHeaders.addListener(
-    function(details) {
-        // Pass through if the plugin is inactive.
-        if( !listenerIsActive ) {
-          return {requestHeaders: details.requestHeaders};
-        }
-        // Push in the Accept-Datetime header:
-        details.requestHeaders.push( 
-            { name: "Accept-Datetime", 
-              value: targetTime }
-        );
-        return {requestHeaders: details.requestHeaders};
-    },
-    {
-       urls: ["http://* /*", "https://* /*"]
-    },
+
+function addAcceptDatetime(details) {
+    // Pass through if the plugin is inactive.
+    if( !timeTravelEnabled ) {
+      return {requestHeaders: details.requestHeaders};
+    }
+    // Push in the Accept-Datetime header:
+    console.log("Adding Accept-Datetime: "+ targetTime);
+    details.requestHeaders.push( 
+        { name: "Accept-Datetime", 
+          value: targetTime }
+    );
+    return {requestHeaders: details.requestHeaders};
+}
+// Hook it in:
+browser.webRequest.onBeforeSendHeaders.addListener(
+	addAcceptDatetime,
+	{ urls: ['<all_urls>']},
     ['requestHeaders','blocking']
- );
-*/
+);
+
 
 /**
  * During download, look for the expected Link headers and store them
@@ -153,12 +96,9 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
  Link: <http://www.webarchive.org.uk/wayback/list/timebundle/http://www.webarchive.org.uk/ukwa/>;rel="timebundle", <http://www.webarchive.org.uk/ukwa/>;rel="original", <http://www.webarchive.org.uk/wayback/memento/20090313000232/http://www.webarchive.org.uk/ukwa/>;rel="first memento"; datetime="Fri, 13 Mar 2009 00:02:32 GMT", <http://www.webarchive.org.uk/wayback/memento/20100623220138/http://www.webarchive.org.uk/ukwa/>;rel="last memento"; datetime="Wed, 23 Jun 2010 22:01:38 GMT", <http://www.webarchive.org.uk/wayback/memento/20090401212218/http://www.webarchive.org.uk/ukwa/>;rel="next memento"; datetime="Wed, 01 Apr 2009 21:22:18 GMT" , <http://www.webarchive.org.uk/wayback/list/timemap/link/http://www.webarchive.org.uk/ukwa/>;rel="timemap"; type="application/link-format",<http://www.webarchive.org.uk/wayback/memento/timegate/http://www.webarchive.org.uk/ukwa/>;rel="timegate"
  * i.e. <([^>])>;rel="([^"])"
  */
-
-/*
 var relRegex = /<([^>]+)>;rel="([^"]+)"/g;
 var tabRels = [];
-chrome.webRequest.onHeadersReceived.addListener(
-  function(details) {
+function checkForMementoHeaders(details) {
     tabRels[details.tabId] = {};
     var headers = details.responseHeaders;
     var isMemento = false;
@@ -176,19 +116,18 @@ chrome.webRequest.onHeadersReceived.addListener(
         tabRels[details.tabId]["Memento-Datetime"] = headers[i].value;
       }
     }
-  },
-  {
-    urls:["http://* /*", "https://* /*"],
-    types:["main_frame"]
-  },
-  ["responseHeaders","blocking"]
-);
+}
+// Hook in it:
+browser.webRequest.onHeadersReceived.addListener(
+		  checkForMementoHeaders,
+		  {urls: ['<all_urls>']},
+		  ["blocking", "responseHeaders"]
+		);
 
-*/
+/* This for Chrome */
 navigator.registerProtocolHandler('web+webarchive',
 	    chrome.runtime.getURL('webarchive-bookmark.html#%s'),
 	    chrome.runtime.getManifest().name);
-	    console.log("Registered... "+ chrome.runtime.getURL('webarchive-bookmark.html#%s'));
 
 /**
  * Also allow Google Analytics to track if people are actually using this.

@@ -21,16 +21,18 @@ document.onreadystatechange = function(){
 		if( $('#enable-timetravel').hasClass('disabled')) {
 			$('#update-page').removeClass('disabled');
 		}
+		// Also tell the bg page:
+	    chrome.runtime.sendMessage({setTargetTime: true, targetTime: $('#target-date').val() });
 	});
 
 	$('#enable-timetravel').click(function(e){
-		chrome.browserAction.setIcon({path:"icon-on.png"});
+	    chrome.runtime.sendMessage({engageTimeTravel: true, targetTime: $('#target-date').val() });
 		$('#enable-timetravel').addClass('disabled');
 		$('#disable-timetravel').removeClass('disabled');
 		//$('#update-page').removeClass('disabled');
 	});
 	$('#disable-timetravel').click(function(e){
-		chrome.browserAction.setIcon({path:"icon-off.png"});
+	    chrome.runtime.sendMessage({disengageTimeTravel: true});
 		$('#enable-timetravel').removeClass('disabled');
 		$('#disable-timetravel').addClass('disabled');
 		$('#update-page').addClass('disabled');
