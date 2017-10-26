@@ -26,6 +26,8 @@ function disableTimeTravel() {
         chrome.browserAction.setIcon({path:"icon-off.png"});
         // Remove the proxy override:
         browser.proxy.unregister();
+        // Clear cache
+        chrome.browsingData.removeCache({});
         // revert to live site.
         chrome.tabs.reload({bypassCache: true});
     }
@@ -38,6 +40,8 @@ function enableTimeTravel() {
         // Enable the proxy:
         console.log("Registering proxy...")
         browser.proxy.register('webarchive-proxy.js');
+        // Clear cache
+        chrome.browsingData.removeCache({});
         // Refresh tab to force switch to archival version:
         chrome.tabs.reload({bypassCache: true});
     }
@@ -63,11 +67,38 @@ chrome.runtime.onMessage.addListener(function(msg, _, sendResponse) {
   } else if( msg.setTargetTime ) {
     console.log("Setting date "+msg.targetTime);
     setTargetTime(msg.targetTime);
+    // Refresh tab to force update to new time setting::
+    chrome.tabs.reload({bypassCache: true});
   } else if( msg.requestTargetTime ) {
     console.log("Sending current targetTime...");
     chrome.runtime.sendMessage({showTargetTime: true, targetTime: targetTime });
   }
 });
+
+/**
+ * This takes a HTTPS request and redirects it to HTTP because that's all the proxy can support.
+ * 
+ * @param details
+ * @returns
+ */
+function bounceToHttp(requestDetails) {
+    if( timeTravelEnabled ) {
+	  newUrl = requestDetails.url;
+	  newUrl = newUrl.replace("https://", "http://");
+	  console.log("Redirecting: " + requestDetails.url + " to " + newUrl);
+	  return {
+	    redirectUrl: newUrl
+       };
+    }
+}
+
+// add the listener,
+// passing the filter argument and "blocking"
+chrome.webRequest.onBeforeRequest.addListener(
+  bounceToHttp,
+  {urls:["https://*/*"]},
+  ["blocking"]
+);
 
 /**
  * This modifies the request headers, adding in the desire Datetime.

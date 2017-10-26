@@ -19,7 +19,7 @@ Chrome and Firefox web extension
 
 # Description
 
-This is an experimental web extension exploring whether we can make proxy-mode access to web archives.
+This is an experimental web extension exploring whether we can make proxy-mode access to web archives easy from within the users' own browser (rather than relying on [a standalone application](https://github.com/ukwa/ukwa-player)).
 
 Ideally, we could have different target time settings in every tab. However, [browser proxy settings](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/proxy) are not tab-scoped, they are global, so this is not trivial to implement. Even if we switch proxy settings when tabs are stwiched, any background activity in a tab will be re-directed to a different datetime when the switch is made. It may be possible to come up with more elaborate solutions for this, but for now it seems easier to accept that the proxy is a global setting and work with that.
 
@@ -56,6 +56,16 @@ Other ideas:
 * Allow different proxies to be specified for different host/SURT ranges?
 * Interface with UKWA W3ACT API and allow some curation activities from in the browser?
 
+Some examples for testing (GitHub Markdown seems not to recognised them as links however):
+
+* [portico.bl.uk c. 1995](web+webarchive://proxy.webarchive.org.uk/?url=http://portico.bl.uk&timestamp=19950418155600)
+* [portico.bl.uk c. 2001](web+webarchive://proxy.webarchive.org.uk/?url=http://portico.bl.uk&timestamp=20010912092058)
+* [portico.bl.uk c. 2008](web+webarchive://proxy.webarchive.org.uk/?url=http://portico.bl.uk&timestamp=20080919042735)
+* [portico.bl.uk c. 2012](web+webarchive://proxy.webarchive.org.uk/?url=http://portico.bl.uk&timestamp=20120919042735)
+* [webarchive.org.uk c. 2008](web+webarchive://proxy.webarchive.org.uk/?url=http://webarchive.org.uk&timestamp=20080304140132)
+* [webarchive.org.uk c. 2012](web+webarchive://proxy.webarchive.org.uk/?url=http://webarchive.org.uk&timestamp=20120304140132)
+
+
 
 # Dev
 
@@ -78,7 +88,7 @@ This project is licensed under the terms of the GNU AGPLv3.
 
 ## Issues
 
-report issues on [Tachyon project](https://github.com/ukwa/tachyon/issues)
+Report issues on [Tachyon project](https://github.com/ukwa/tachyon/issues)
 
 
 Change Log

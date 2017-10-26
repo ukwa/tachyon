@@ -34,6 +34,7 @@
        "<all_urls>",
        "webRequestBlocking",
        "proxy",
+       "browsingData",
        "tabs"
     ],
     "content_security_policy": "script-src 'self' https://ssl.google-analytics.com https://maxcdn.bootstrapcdn.com https://unpkg.com/ https://code.jquery.com https://cdnjs.cloudflare.com; object-src 'self'"
