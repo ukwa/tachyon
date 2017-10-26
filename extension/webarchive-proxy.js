@@ -15,7 +15,7 @@ chrome.runtime.onMessage.addListener((message) => {
 // required PAC function that will be called to determine
 // if a proxy should be used.
 function FindProxyForURL(url, host) {
-	return "PROXY localhost:8090";
+	return "PROXY 192.168.45.25:8090";
 	/*
   if (blockedHosts.indexOf(host) != -1) {
     chrome.runtime.sendMessage(`Proxy-blocker: blocked ${url}`);
