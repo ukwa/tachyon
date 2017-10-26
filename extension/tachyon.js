@@ -25,7 +25,7 @@ function disableTimeTravel() {
         timeTravelEnabled = false;
         chrome.browserAction.setIcon({path:"icon-off.png"});
         // Remove the proxy override:
-        chrome.proxy.unregister();
+        browser.proxy.unregister();
         // revert to live site.
         chrome.tabs.reload({bypassCache: true});
     }
@@ -36,11 +36,16 @@ function enableTimeTravel() {
         timeTravelEnabled = true;
         chrome.browserAction.setIcon({path:"icon-on.png"});
         // Enable the proxy:
-        chrome.proxy.register('webarchive-proxy.js');
+        console.log("Registering proxy...")
+        browser.proxy.register('webarchive-proxy.js');
         // Refresh tab to force switch to archival version:
         chrome.tabs.reload({bypassCache: true});
     }
 }
+
+browser.proxy.onProxyError.addListener(error => {
+	  console.error(`Proxy error: ${error.message}`);
+	});
 
 function setTargetTime(timeString) {
 	targetTime = new Date(timeString).toUTCString()
