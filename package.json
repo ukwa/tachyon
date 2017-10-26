@@ -4,7 +4,7 @@
   "homepage": "http://www.webarchive.org.uk",
   "repository": "https://github.com/ukwa/tachyon",
   "license": "AGPL-3.0",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "UK Web Archive",
   "scripts": {
     "clean": "rm -rf extension/dist/ && mkdir extension/dist/ && rm -rf build && mkdir build && npm prune && npm install",
