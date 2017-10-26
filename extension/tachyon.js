@@ -25,9 +25,9 @@ function disableTimeTravel() {
         timeTravelEnabled = false;
         chrome.browserAction.setIcon({path:"icon-off.png"});
         // Remove the proxy override:
-        browser.proxy.unregister();
+        chrome.proxy.unregister();
         // revert to live site.
-        browser.tabs.reload({bypassCache: true});
+        chrome.tabs.reload({bypassCache: true});
     }
 }
 
@@ -36,9 +36,9 @@ function enableTimeTravel() {
         timeTravelEnabled = true;
         chrome.browserAction.setIcon({path:"icon-on.png"});
         // Enable the proxy:
-        browser.proxy.register('webarchive-proxy.js');
+        chrome.proxy.register('webarchive-proxy.js');
         // Refresh tab to force switch to archival version:
-        browser.tabs.reload({bypassCache: true});
+        chrome.tabs.reload({bypassCache: true});
     }
 }
 
@@ -66,6 +66,8 @@ chrome.runtime.onMessage.addListener(function(msg, _, sendResponse) {
 
 /**
  * This modifies the request headers, adding in the desire Datetime.
+ * 
+ * TODO avoid interfering when there is no tab?
  */
 
 function addAcceptDatetime(details) {
@@ -82,7 +84,7 @@ function addAcceptDatetime(details) {
     return {requestHeaders: details.requestHeaders};
 }
 // Hook it in:
-browser.webRequest.onBeforeSendHeaders.addListener(
+chrome.webRequest.onBeforeSendHeaders.addListener(
 	addAcceptDatetime,
 	{ urls: ['<all_urls>']},
     ['requestHeaders','blocking']
@@ -118,7 +120,7 @@ function checkForMementoHeaders(details) {
     }
 }
 // Hook in it:
-browser.webRequest.onHeadersReceived.addListener(
+chrome.webRequest.onHeadersReceived.addListener(
 		  checkForMementoHeaders,
 		  {urls: ['<all_urls>']},
 		  ["blocking", "responseHeaders"]
