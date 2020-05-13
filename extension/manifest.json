@@ -1,10 +1,10 @@
 {
    "manifest_version": 2,
    "minimum_chrome_version": "57",
-   "name": "UKWA Player",
+   "name": "UKWA Toolkit",
    "version": "0.0.2",
    "background": {
-       "scripts": ["tachyon.js"]
+       "scripts": ["background.js"]
    },
    "icons": { 
            "16": "icon16.png",
@@ -13,13 +13,13 @@
    },
    "browser_action": {
     "default_icon": "icon-off.png",
-    "default_title": "UKWA Player - Browsing The Web Of The Past",
+    "default_title": "UKWA Toolkit",
     "default_popup": "popup.html"
    },
    "protocol_handlers": [
   {
     "protocol": "web+webarchive",
-    "name": "Web Archive Bookmark Viewer",
+    "name": "Web Archive Bookmark Protocol",
     "uriTemplate": "./webarchive-bookmark.html#%s"
   }
   ],
@@ -37,5 +37,5 @@
        "browsingData",
        "tabs"
     ],
-    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com https://maxcdn.bootstrapcdn.com https://unpkg.com/ https://code.jquery.com https://cdnjs.cloudflare.com; object-src 'self'"
+    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com https://maxcdn.bootstrapcdn.com https://unpkg.com/ https://code.jquery.com https://cdnjs.cloudflare.com https://www.webarchive.org.uk; object-src 'self'"
 }

@@ -47,9 +47,10 @@ function enableTimeTravel() {
     }
 }
 
-browser.proxy.onProxyError.addListener(error => {
+/*browser.proxy.onProxyError.addListener(error => {
 	  console.error(`Proxy error: ${error.message}`);
 	});
+*/
 
 function setTargetTime(timeString) {
 	targetTime = new Date(timeString).toUTCString()
